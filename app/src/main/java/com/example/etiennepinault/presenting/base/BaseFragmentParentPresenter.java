@@ -38,6 +38,9 @@ public abstract class BaseFragmentParentPresenter<V extends BaseView, P extends 
                     }
                 }
             }
+            if(matchingConstructor == null) {
+                throw new RuntimeException("Did you forget to make your Fragment extending the BaseFragmentParent class ?");
+            }
             return matchingConstructor;
         }
 

@@ -10,7 +10,8 @@ import android.widget.FrameLayout;
 import com.example.etiennepinault.presenting.base.BaseFragmentParent;
 
 public class ThirdFragment
-        extends BaseFragmentParent<ThirdPresenter> implements ThirdView{
+        extends BaseFragmentParent<ThirdPresenter>
+        implements ThirdView{
 
     @Nullable @Override
     public View onCreateView(LayoutInflater inflater,

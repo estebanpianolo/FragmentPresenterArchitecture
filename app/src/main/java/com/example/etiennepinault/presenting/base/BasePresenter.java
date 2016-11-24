@@ -60,19 +60,22 @@ public abstract class BasePresenter <V extends BaseView> {
         }
 
         private Constructor<?> getConstructor(BaseView view) throws ClassCastException {
-            Constructor<?>[] declaredConstructors = getPresenterClass(view).getConstructors();
-            Constructor<?> constructor = null;
-            for (Constructor<?> declaredConstructor : declaredConstructors) {
-                Class<?>[] parameterTypes = declaredConstructor.getParameterTypes();
+            Constructor<?>[] constructors = getPresenterClass(view).getConstructors();
+            Constructor<?> matchingConstructor = null;
+            for (Constructor<?> constructor : constructors) {
+                Class<?>[] parameterTypes = constructor.getParameterTypes();
                 if (parameterTypes.length == 1) {
                     Class<?> parameterType = parameterTypes[0];
                     if (BaseView.class.isAssignableFrom(parameterType)) {
-                        constructor = declaredConstructor;
+                        matchingConstructor = constructor;
                         break;
                     }
                 }
             }
-            return constructor;
+            if(matchingConstructor == null) {
+                throw new RuntimeException("Did you forget to make your Fragment extending the BaseFragment class ?");
+            }
+            return matchingConstructor;
         }
 
         public P build(BaseView view) {
@@ -84,7 +87,7 @@ public abstract class BasePresenter <V extends BaseView> {
                         e);
             } catch (IllegalArgumentException e) {
                 throw new RuntimeException(
-                        "Did you forget to make your activity implementing the BaseView interface ?",
+                        "Did you forget to make your Fragment implementing the BaseView interface ?",
                         e);
             } catch (Exception e) {
                 throw new RuntimeException(e);
