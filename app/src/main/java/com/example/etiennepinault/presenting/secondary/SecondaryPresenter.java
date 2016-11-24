@@ -12,7 +12,7 @@ public class SecondaryPresenter extends BaseFragmentPresenter<SecondaryView> {
     public SecondaryPresenter(@NonNull SecondaryView view) {
         super(view);
 
-        counter.subscribe(view::setCounter);
+        addSubscription(counter.subscribe(view::setCounter));
     }
 
     @Override public void destroy() {
@@ -21,5 +21,9 @@ public class SecondaryPresenter extends BaseFragmentPresenter<SecondaryView> {
 
     public void incrementCounter() {
         counter.onNext(counter.getValue()+1);
+    }
+
+    public void decrementCounter() {
+        counter.onNext(counter.getValue()-1);
     }
 }

@@ -15,7 +15,7 @@ public class BaseFragment<P extends BaseFragmentPresenter> extends Fragment impl
     }
 
     @Override public void onDestroyView() {
-        presenter.destroy();
+        presenter.onDestroy();
         presenter = null;
         super.onDestroyView();
     }

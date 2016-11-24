@@ -16,7 +16,7 @@ public class BaseActivity<P extends BasePresenter> extends AppCompatActivity
     }
 
     @Override protected void onDestroy() {
-        presenter.destroy();
+        presenter.onDestroy();
         super.onDestroy();
     }
 

@@ -2,6 +2,12 @@ package com.example.etiennepinault.presenting.base;
 
 import android.support.annotation.NonNull;
 
+import rx.Scheduler;
+import rx.Subscription;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
+import rx.subscriptions.CompositeSubscription;
+
 import java.lang.reflect.Constructor;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -10,13 +16,37 @@ public abstract class BasePresenter <V extends BaseView> {
 
     protected final @NonNull V view;
 
+    private CompositeSubscription subscriptions = new CompositeSubscription();
+
     public BasePresenter(@NonNull V view) {
         this.view = view;
     }
 
     @SuppressWarnings({ "ConstantConditions", "unused" }) private BasePresenter() {view = null;}
 
-    public abstract void destroy();
+    public void onDestroy() {
+        destroy();
+        clearSubscriptions();
+    }
+
+    protected abstract void destroy();
+
+    protected Scheduler getIoThread() {
+        return Schedulers.io();
+    }
+
+    protected Scheduler getMainThread() {
+        return AndroidSchedulers.mainThread();
+    }
+
+
+    protected void addSubscription(Subscription subscription) {
+        subscriptions.add(subscription);
+    }
+
+    protected void clearSubscriptions() {
+        subscriptions.clear();
+    }
 
     static class Factory<P extends BasePresenter> {
 

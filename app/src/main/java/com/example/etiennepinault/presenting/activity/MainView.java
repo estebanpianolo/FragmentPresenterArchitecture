@@ -1,14 +1,9 @@
 package com.example.etiennepinault.presenting.activity;
 
 import com.example.etiennepinault.presenting.base.BaseView;
-import com.example.etiennepinault.presenting.primary.PrimaryFragment;
-import com.example.etiennepinault.presenting.secondary.SecondaryFragment;
+import com.example.etiennepinault.presenting.secondary.SecondaryPresenter;
 
 public interface MainView extends BaseView {
 
-    void changeMainPadding();
-
-    void addPrimaryFragment(PrimaryFragment primaryFragment);
-
-    void addSecondaryFragment(SecondaryFragment secondaryFragment);
+    SecondaryPresenter getSecondaryPresenter();
 }
