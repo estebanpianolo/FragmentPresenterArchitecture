@@ -1,7 +1,7 @@
 package com.example.etiennepinault.presenting.base;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 
 public class BaseActivity<P extends BasePresenter> extends AppCompatActivity
@@ -12,7 +12,7 @@ public class BaseActivity<P extends BasePresenter> extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        presenter = new PresenterFactory<P>().build(this);
+        presenter = new BasePresenter.Factory<P>().build(this);
     }
 
     @Override protected void onDestroy() {
@@ -20,7 +20,7 @@ public class BaseActivity<P extends BasePresenter> extends AppCompatActivity
         super.onDestroy();
     }
 
-    public @NonNull P getPresenter() {
+    public @Nullable P getPresenter() {
         return presenter;
     }
 }

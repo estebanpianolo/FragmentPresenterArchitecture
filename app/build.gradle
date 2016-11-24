@@ -1,10 +1,28 @@
 apply plugin: 'com.android.application'
+apply plugin: 'me.tatarka.retrolambda'
+apply plugin: 'android-apt'
 
-repositories {
-  mavenCentral()
+buildscript {
+  repositories {
+    mavenLocal()
+    jcenter()
+    mavenCentral()
+  }
+
+  dependencies {
+    classpath 'me.tatarka.retrolambda.projectlombok:lombok.ast:0.2.3.a2'
+    classpath "me.tatarka:gradle-retrolambda:3.3.0"
+    classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
+  }
 }
 
 android {
+
+  compileOptions {
+    sourceCompatibility JavaVersion.VERSION_1_8
+    targetCompatibility JavaVersion.VERSION_1_8
+  }
+
   compileSdkVersion 25
   buildToolsVersion "24.0.2"
   defaultConfig {
@@ -31,5 +49,11 @@ dependencies {
   compile 'com.android.support:appcompat-v7:25.0.1'
   testCompile 'junit:junit:4.12'
   compile 'com.google.code.gson:gson:2.4'
+
+  compile 'io.reactivex:rxandroid:1.2.1'
+  compile 'io.reactivex:rxjava:1.2.2'
+
+  compile 'com.jakewharton:butterknife:8.4.0'
+  apt 'com.jakewharton:butterknife-compiler:8.4.0'
 
 }
