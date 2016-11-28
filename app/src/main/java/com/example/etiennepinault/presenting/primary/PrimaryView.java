@@ -1,6 +1,6 @@
 package com.example.etiennepinault.presenting.primary;
 
-import com.example.etiennepinault.presenting.base.BaseView;
+import com.example.presenting.BaseView;
 
 public interface PrimaryView extends BaseView {
 

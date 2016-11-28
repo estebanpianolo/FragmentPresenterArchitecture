@@ -1,4 +1,4 @@
-package com.example.etiennepinault.presenting.base;
+package com.example.presenting;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -24,11 +24,26 @@ public class BaseFragmentParent<P extends BaseFragmentParentPresenter>
                 baseParentPresenter = (BaseParentPresenter) activityPresenter;
             }
         }
+        BaseState baseState = null;
+        if(savedInstanceState != null) {
+            Object state = savedInstanceState.get("savedState_" + getClass().getName());
+            if(state != null && state instanceof BaseState) {
+                baseState = (BaseState) state;
+            }
+        }
         if(baseParentPresenter != null) {
             presenter = new BaseFragmentParentPresenter.
-                    Factory<P>().build(this, baseParentPresenter);
+                    Factory<P>().build(this, baseState, baseParentPresenter);
         } else {
             throw new RuntimeException("Did you forget to add a Presenter as a genericType in your Fragment ?");
+        }
+    }
+
+    @Override public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        P presenter = getPresenter();
+        if(presenter != null) {
+            outState.putSerializable("savedState_" + getClass().getName(), presenter.saveState());
         }
     }
 

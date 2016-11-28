@@ -1,6 +1,6 @@
 package com.example.etiennepinault.presenting.third;
 
-import com.example.etiennepinault.presenting.base.BaseView;
+import com.example.presenting.BaseView;
 
 public interface ThirdView
         extends BaseView {

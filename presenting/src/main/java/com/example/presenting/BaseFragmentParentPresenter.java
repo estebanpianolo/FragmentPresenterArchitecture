@@ -1,16 +1,19 @@
-package com.example.etiennepinault.presenting.base;
+package com.example.presenting;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import java.lang.reflect.Constructor;
 
-public abstract class BaseFragmentParentPresenter<V extends BaseView, P extends BaseParentPresenter>
-        extends BaseFragmentPresenter<V> {
+public abstract class BaseFragmentParentPresenter<V extends BaseView, S extends BaseState, P extends BaseParentPresenter>
+        extends BaseFragmentPresenter<V, S> {
 
     @NonNull private P parentPresenter;
 
-    public BaseFragmentParentPresenter(@NonNull V view, @NonNull P parentPresenter) {
-        super(view);
+    public BaseFragmentParentPresenter(@NonNull V view,
+                                       @Nullable S state,
+                                       @NonNull P parentPresenter) {
+        super(view, state);
         this.parentPresenter = parentPresenter;
     }
 
@@ -28,10 +31,12 @@ public abstract class BaseFragmentParentPresenter<V extends BaseView, P extends 
             Constructor<?> matchingConstructor = null;
             for (Constructor<?> constructor : constructors) {
                 Class<?>[] parameterTypes = constructor.getParameterTypes();
-                if (parameterTypes.length == 2) {
+                if (parameterTypes.length == 3) {
                     Class<?> presenterType = parameterTypes[0];
-                    Class<?> parentPresenterType = parameterTypes[1];
+                    Class<?> stateType = parameterTypes[1];
+                    Class<?> parentPresenterType = parameterTypes[2];
                     if (BaseView.class.isAssignableFrom(presenterType)
+                            && BaseState.class.isAssignableFrom(stateType)
                             && BaseParentPresenter.class.isAssignableFrom(parentPresenterType)) {
                         matchingConstructor = constructor;
                         break;
@@ -44,9 +49,9 @@ public abstract class BaseFragmentParentPresenter<V extends BaseView, P extends 
             return matchingConstructor;
         }
 
-        P build(BaseView view, BaseParentPresenter baseParentPresenter) {
+        P build(BaseView view, BaseState state, BaseParentPresenter baseParentPresenter) {
             try {
-                return (P) getConstructor(view).newInstance(view, baseParentPresenter);
+                return (P) getConstructor(view).newInstance(view, state, baseParentPresenter);
             } catch (ClassCastException e) {
                 throw new RuntimeException(
                         "Did you forget to add a Presenter as a genericType in your Fragment ?",

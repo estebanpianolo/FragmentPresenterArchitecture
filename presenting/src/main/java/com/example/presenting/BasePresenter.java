@@ -1,6 +1,7 @@
-package com.example.etiennepinault.presenting.base;
+package com.example.presenting;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import rx.Scheduler;
 import rx.Subscription;
@@ -12,13 +13,13 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 
-public abstract class BasePresenter <V extends BaseView> {
+public abstract class BasePresenter <V extends BaseView, S extends BaseState> {
 
     protected final @NonNull V view;
 
     private CompositeSubscription subscriptions = new CompositeSubscription();
 
-    public BasePresenter(@NonNull V view) {
+    public BasePresenter(@NonNull V view, @Nullable S state) {
         this.view = view;
     }
 
@@ -28,6 +29,8 @@ public abstract class BasePresenter <V extends BaseView> {
         destroy();
         clearSubscriptions();
     }
+
+    abstract protected S saveState();
 
     protected abstract void destroy();
 
@@ -64,9 +67,11 @@ public abstract class BasePresenter <V extends BaseView> {
             Constructor<?> matchingConstructor = null;
             for (Constructor<?> constructor : constructors) {
                 Class<?>[] parameterTypes = constructor.getParameterTypes();
-                if (parameterTypes.length == 1) {
+                if (parameterTypes.length == 2) {
                     Class<?> parameterType = parameterTypes[0];
-                    if (BaseView.class.isAssignableFrom(parameterType)) {
+                    Class<?> stateType = parameterTypes[1];
+                    if (BaseView.class.isAssignableFrom(parameterType)
+                            && BaseState.class.isAssignableFrom(stateType)) {
                         matchingConstructor = constructor;
                         break;
                     }
@@ -78,9 +83,9 @@ public abstract class BasePresenter <V extends BaseView> {
             return matchingConstructor;
         }
 
-        public P build(BaseView view) {
+        public P build(BaseView view, BaseState state) {
             try {
-                return (P) getConstructor(view).newInstance(view);
+                return (P) getConstructor(view).newInstance(view, state);
             } catch (ClassCastException e) {
                 throw new RuntimeException(
                         "Did you forget to add a Presenter as a genericType in your Activity ?",

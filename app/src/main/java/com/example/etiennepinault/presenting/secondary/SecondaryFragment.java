@@ -11,11 +11,12 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 import com.example.etiennepinault.presenting.R;
-import com.example.etiennepinault.presenting.base.BaseFragment;
+import com.example.presenting.BaseFragment;
 
 import java.util.Locale;
 
-public class SecondaryFragment extends BaseFragment<SecondaryPresenter> implements SecondaryView {
+public class SecondaryFragment extends BaseFragment<SecondaryPresenter>
+        implements SecondaryView {
 
     @BindView(R.id.counter) TextView counterView;
 
@@ -25,6 +26,7 @@ public class SecondaryFragment extends BaseFragment<SecondaryPresenter> implemen
                              Bundle savedInstanceState) {
         View inflate = inflater.inflate(R.layout.secondary_fragment, container, false);
         ButterKnife.bind(this, inflate);
+
         return inflate;
     }
 

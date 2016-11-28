@@ -7,7 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
-import com.example.etiennepinault.presenting.base.BaseFragmentParent;
+import com.example.presenting.BaseFragmentParent;
 
 public class PrimaryFragment
         extends BaseFragmentParent<PrimaryPresenter>
